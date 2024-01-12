@@ -13,7 +13,7 @@ radiation_cases = []
 pharmatherapy_cases = []
 patient_list = {}
 mutation_list = []
-mutations_to_patient={}
+patient_to_mutation={}
 
 
 
@@ -180,9 +180,10 @@ row["treatment_type"],
 ))
 for x, row in mutations.iterrows():
     mut_list = []
+    mut = Mutation(row['DNA Change'],row['Type'],row['Consequences'],row['Impact'])
+    mutation_list.append(mut)
     for y in row['Associated Patients'].split('\n'):
-        mut_list.append(patient_list.get(y))
-    mutation_list.append(Mutation(row['DNA Change'],row['Type'],row['Consequences'],row['Impact'],mut_list))
+        patient_to_mutation[patient_list.get(y)]=mut
 #for x, row in mutations2.iterrows():
 #    mutation_list.append(Mutation(row['DNA Change'],row['Type'],row['Consequences'],row['Impact']))
 #for x, row in mutations3.iterrows():
@@ -206,6 +207,7 @@ for patient in patient_list.values():
 print("Number of radation cases: " + str(len(radiation_cases)))
 print("Number of pharmatherapy cases: " + str(len(pharmatherapy_cases)))
 print("Total cases: " + str(len(radiation_cases+pharmatherapy_cases)))
-for x in mutation_list:
-    print(str(x))
+for x,y in patient_to_mutation.items():
+    print("Patient: " + str(x) + ", " + "Mutation: " + str(y))
+
 #print(mutations.columns)

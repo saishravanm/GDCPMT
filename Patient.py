@@ -160,4 +160,4 @@ class Patient:
      self.treatment_outcome=treatment_outcome
      self.treatment_type=treatment_type
     def __str__(self):
-        print(self.case_submitter_id)
+        return (self.case_submitter_id)
