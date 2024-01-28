@@ -43,3 +43,8 @@ mutations3.columns.name = 'mutations3'
 
 mutations = pd.read_excel('./mutations_data/mutations1.xlsx')
 #mutations.columns.name = mutations
+
+with open('./mutations_data/patmut.txt','r',encoding='utf-8',newline='') as patmutcsv:
+    patmut = pd.read_csv(patmutcsv)
+#print(str(patmut))
+print(type(patmut))

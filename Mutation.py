@@ -7,5 +7,5 @@ class Mutation:
         self.consequences = consequences
         self.impact = impact
     def __str__(self):
-        return self.dna_change
-        #print("DNA Change: " + self.dna_change + "\nType: " + self.type + "\nConsequences: " + self.consequences+"\nImpact: " + self.impact + "\nPatient List: ")
+        #return self.dna_change
+        return("DNA Change: " + self.dna_change + "\nType: " + self.type + "\nConsequences: " + self.consequences+"\nImpact: " + self.impact + "\n\n")
