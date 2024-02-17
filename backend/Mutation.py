@@ -1,5 +1,4 @@
 
-from Patient import Patient
 class Mutation:
     def __init__(self,dna_change,type,consequences,impact):
         self.dna_change = dna_change
