@@ -16,3 +16,6 @@ for x in pharmatherapy_cases:
 
 for x in deceased_pharma_cases:
     print(getattr(x,'case_submitter_id'))
+for x in deceased_radiation_cases:
+    print(str(x))
+    print(radiation_treatment_list.get(getattr(x,"case_submitter_id")))
