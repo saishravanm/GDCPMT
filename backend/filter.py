@@ -1,4 +1,4 @@
-from setup import clinical,exposure,family_history,follow_up,pathology_detail,aliquot,analyte,portion,sample,slide,mutations,patmut
+from setup import *
 import urllib.request
 import json
 import re
@@ -185,6 +185,8 @@ for x, row in mutations.iterrows():
     mutation_to_patients[mut] = [row['Associated Patients'].split('\n')]
     for y in row['Associated Patients'].split('\n'):
         patient_to_mutation[patient_list.get(y)]=mut
+for x, row in radiation_treatment_data.iterrows():
+
 
 
 for patient in patient_list.values():

@@ -44,6 +44,12 @@ mutations3.columns.name = 'mutations3'
 mutations = pd.read_excel('./mutations_data/mutations1.xlsx')
 #mutations.columns.name = mutations
 
+#radiationinfo = pd.read_csv('./clinical_data/radiationinfo.tsv',delimiter='/t')
+
+treatment_data = pd.ExcelFile('./clinical_data/treatment_data.xlsx')
+radiation_treatment_data = pd.read_excel(treatment_data,'radiation_info')
+pharmaceutical_treatment_data = pd.read_excel(treatment_data,'pharma_info')
+
 with open('./mutations_data/patmut.txt','r',encoding='utf-8',newline='') as patmutcsv:
     patmut = pd.read_csv(patmutcsv)
 #print(str(patmut))
