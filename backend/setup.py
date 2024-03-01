@@ -1,7 +1,7 @@
 import pandas as pd
 
 #URL="https://portal.gdc.cancer.gov/exploration?facetTab=genes&filters=%7B%22op%22%3A%22and%22%2C%22content%22%3A%5B%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22cases.available_variation_data%22%2C%22value%22%3A%5B%22ssm%22%5D%7D%7D%2C%7B%22content%22%3A%7B%22field%22%3A%22cases.project.project_id%22%2C%22value%22%3A%5B%22TCGA-BRCA%22%5D%7D%2C%22op%22%3A%22in%22%7D%2C%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22genes.gene_id%22%2C%22value%22%3A%5B%22ENSG00000141510%22%5D%7D%7D%2C%7B%22op%22%3A%22NOT%22%2C%22content%22%3A%7B%22field%22%3A%22ssms.ssm_id%22%2C%22value%22%3A%22MISSING%22%7D%7D%5D%7D&searchTableTab=cases"
-clinical=pd.read_csv('./clinical_data/clinical.tsv',sep='\t')
+clinical=pd.read_csv('C:\\Users\\Sai\\Documents\\GitHub\\TPBase\\backend\\clinical_data\\clinical.tsv',sep='\t')
 clinical.columns.name = 'clinical'
 
 exposure=pd.read_csv('./misc_data/exposure.tsv',sep='\t')
