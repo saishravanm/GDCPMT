@@ -1,0 +1,65 @@
+Graph Categories: 
+
+// = finished
+
+Linear Regression
+Pair-wise graph
+-Two variable graphs
+Scatterplots
+
+Radiation:
+//case submitter id TO radiation therapy ended days to
+//case submitter id TO radiation total dose
+//radiation therapy site TO radiation total dose
+//therapy regimen TO radiation adjuvant fractions total
+//therapy regimen TO radiation total dose
+//mutation TO radiation therapy ended days to
+//dna change TO radiation total dose
+//dna change TO radiation adjuvant fractions total
+//dna change TO therapy regimen
+//dna change TO radiation therapy site
+//mutation type TO radiation total dose 
+//mutation type TO radiation adjuvant fractions
+//mutation type TO therapy regimen
+//mutation impact TO radiation therapy ended days to 
+//mutation impact TO radiation total dose 
+//mutation impact TO radiation adjuvant fractions total 
+//mutation impact TO therapy regimen
+//mutation impact TO radiation therapy site
+
+Pharmaceutical:
+case submitter id TO prescribed dose 
+case submitter id TO total dose
+case submitter id TO days to drug therapy start
+case submitter id TO days to drug therapy end
+case submitter id TO drug name 
+case submitter id TO regimen number
+drug name TO prescribed dose 
+drug name TO total dose
+drug class TO prescribed dose
+drug class TO total dose
+drug name TO prescribed cycles 
+drug class TO prescribed cycles
+drug name TO regimen number 
+prescribed dose TO regimen number
+mutation to prescribed dose 
+mutation to total dose 
+mutation to days to drug therapy start 
+mutation to days to drug therapy end 
+mutation to drug name 
+mutation to regimen number 
+mutation to prescribed cycles 
+mutation type to prescribed dose 
+mutation type to total dose 
+mutation type to days to drug therapy start 
+mutation type to days to drug therapy end 
+mutation type to drug name 
+mutation type to regimen number 
+mutation type to prescribed cycles
+mutation impact to prescribed dose 
+mutation impact to total dose 
+mutation impact to days to drug therapy start 
+mutation impact to days to drug therapy end 
+mutation impact to drug name 
+mutation impact to regimen number 
+mutation impact to prescribed cycles
