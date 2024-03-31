@@ -7,6 +7,7 @@ class Treatment:
 class Radiation(Treatment):
     def __init__(self, case_submitter_id, barcode, radiation_uuid, form_completion,radiation_therapy_type,radiation_therapy_site,radiation_total_dose,radiation_adjuvant_units,radiation_adjuvant_fractions_total,radiation_therapy_started_days_to,radiation_therapy_ended_days_to,treatment_best_response,course_number,therapy_regimen):
         super().__init__(case_submitter_id, barcode, form_completion)
+        
         self.radiation_uuid = radiation_uuid
         self.radiation_therapy_type = radiation_therapy_type
         self.radiation_therapy_site = radiation_therapy_site
@@ -35,7 +36,6 @@ class Pharmaceutical(Treatment):
     def __init__(self, case_submitter_id,barcode, drug_uuid, form_completion,drug_name,therapy_type,days_to_drug_therapy_start,days_to_drug_therapy_end,measure_of_response,number_cycles,therapy_type_notes,prescribed_dose_units,total_dose_units,prescribed_dose,regimen_number,route_of_administration,regimen_indication,total_dose,tx_on_clinical_trial):
         super().__init__(case_submitter_id, barcode, form_completion)
         self.drug_uuid = drug_uuid 
-        self.form_completion = form_completion
         self.drug_name = drug_name 
         self.therapy_type = therapy_type
         self.days_to_drug_therapy_start = days_to_drug_therapy_start

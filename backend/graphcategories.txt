@@ -7,7 +7,31 @@ Pair-wise graph
 -Two variable graphs
 Scatterplots
 
-Radiation:
+Mutation (Multi var):
+-Replace Y with Polyphen, Sift, and VEP scores 
+
+
+Radiation (Multi Var):
+//-X: Radiation Total Dose, Y: Days to Death, Z: Days to Diagnosis 
+-X: Radiation Total DOse, Y: Days to Death, Z: Days to Best Overall Response 
+-X: Radiation Total DOse, Y: Days to Death, Z: Days to Last Follow Up
+-X: Radiation Total DOse, Y: Days to Death, Z: Days to Last Known Disease Status 
+-X: Radiation Total DOse, Y: Days to Death, Z: Days to Recurrence 
+
+-X: Radiation Total Dose, Y: Days to Birth, Z: Days to Diagnosis 
+-X: Radiation Total Dose, Y: Days to Birth, Z: Days to Best Overall Response 
+-X: Radiation Total Dose, Y: Days to Birth, Z: Dayys to Last Follow Up 
+-X: Radiation Total Dose, Y: Days to Birth, Z: Days to Last Known Disease Status 
+-X: Radiation Total Dose, Y: Days to Birth, Z: Days to Recurrence
+-X: Radiation Adjuvant Fractions, Y: Days to Birth, Z: Days to Diagnosis 
+-X: Radiation Adjuvant Fractions, Y: Days to Death, Z: Days to Diagnosis 
+
+-X: Radiation Total Dose, Y: Days to Birth, Z: Number of Cycles 
+-X: Radiation Total Dose, Y: Days to Death, Z: Number of Cycles  
+-X: Radiation Adjuvant Fractions, Y: Days to Birth, Z: Number of Cycles  
+-X: Radiation Adjuvant Fractions, Y: Days to Birth, Z: Number of CYcles  
+
+Radiation(Single Var):
 //case submitter id TO radiation therapy ended days to
 //case submitter id TO radiation total dose
 //radiation therapy site TO radiation total dose
@@ -26,6 +50,61 @@ Radiation:
 //mutation impact TO radiation adjuvant fractions total 
 //mutation impact TO therapy regimen
 //mutation impact TO radiation therapy site
+
+
+5-Fluorouracil
+Arimidex
+Carboplatin
+Cyclophosphamide
+Cytoxan
+Docetaxel
+Doxorubicin
+Exemestane
+Methotrexate
+Mitomycin
+Paclitaxel
+Pamidronate
+Tamoxifen
+Taxol
+Vinorelbine
+
+Mutations (Multi var):
+-Replace Z with Sift score, VEP, and Polyphen if it exists
+
+Pharmaceutical (Multi var):
+-X: Prescribed Cycles, Y: Prescribed Dose, Z: Days to Drug Therapy start,
+-X: Prescribed Cycles, Y: Prescribed Dose, Z: Days to Drug Therapy end
+-X: Prescribed Cycles, Y: Prescribed Dose, Z: regimen number
+-X: Drug Name, Y: Prescribed Dose, Z: Days to Drug Therapy end
+-X: Drug Name, Y: Prescribed Dose, Z: Prescribed Cycles
+-X: Drug Name, Y: Prescribed Dose, Z: Prescribed Cycles
+-X: Drug Name, Y: Prescribed Dose, Z: Regimen Number
+-X: Drug Name, Y: Prescribed Cycles, Z: Regimen Number
+-X: Drug Class, Y: Prescribed Dose, Z: Days to Drug Therapy start
+-X: Drug Class, Y: Prescribed Dose, Z: Days to Drug Therapy end
+-X: Drug Class, Y: Prescribed Dose, Z: Prescribed Cycles
+-X: Drug Class, Y: Prescribed Dose, Z: Prescribed Cycles
+-X: Drug Class, Y: Prescribed Dose, Z: Regimen Number
+-X: Drug Class, Y: Prescribed Cycles, Z: Regimen Number
+
+-X: Days to drug therapy end, Y: Prescribed Dose, Z: Drug Name 
+-X: Days to drug therapy start, Y: Prescribed Dose, Z: Prescribed Cycles 
+-X: Days to drug therapy end, Y: Prescribed Dose, Z: Prescribed Cycles 
+-X: Days to drug therapy start, Y: Drug Name, Z: Prescribed Cycles 
+-X: Days to drug therapy end, Y: Drug Name, Z: Prescribed Cycles 
+-X: Days to drug therapy start, Y: Prescribed Dose, Z: Regimen Number 
+-X: Days to drug therapy end, Y: Prescribed Dose, Z: Regimen Number 
+-X: Days to drug therapy start, Y: Drug Name, Z: Regimen Number 
+-X: Days to drug therapy end, Y: Drug Name, Z: Regimen Number 
+-X: Days to drug therapy start, Y: Prescribed Cycles, Z: Regimen Number 
+-X: Days to drug therapy end, Y: Prescribed Cycles, Z: Regimen Number 
+-X: Days to drug therapy start, Y: Prescribed Dose, Z: Drug Class
+-X: Days to drug therapy end, Y: Prescribed Dose, Z: Drug Class
+-X: Days to drug therapy start, Y: Prescribed Cycles, Z: Drug Class
+-X: Days to drug therapy end, Y: Prescribed Cycles, Z: Drug Class
+
+
+
 
 Pharmaceutical:
 case submitter id TO prescribed dose 

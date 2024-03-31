@@ -17,6 +17,7 @@ for x in pharmatherapy_cases:
     if(getattr(x,"days_to_death") != "'--"):
         deceased_pharma_cases.append(x)
         deceased_pharma_case_ids.append(getattr(x,'case_submitter_id'))
+        
 def gen_radtreatment_to_mut_bar(x_n,y_n):
     y_axis = []
     x_axis = []
@@ -83,11 +84,11 @@ def gen_pharmatreatment_bar(x_n, y_n):
     plt.show()
 
 #gen_pharmatreatment_bar('case_submitter_id','prescribed_dose')
-gen_radtreatment_to_mut_bar('impact','radiation_therapy_ended_days_to')
-gen_radtreatment_to_mut_bar('impact','radiation_total_dose')
-gen_radtreatment_to_mut_bar('impact','radiation_adjuvant_fractions_total')
-gen_radtreatment_to_mut_bar('impact','therapy_regimen')
-gen_radtreatment_to_mut_bar('impact','radiation_therapy_site')
+#gen_radtreatment_to_mut_bar('impact','radiation_therapy_ended_days_to')
+#gen_radtreatment_to_mut_bar('impact','radiation_total_dose')
+#gen_radtreatment_to_mut_bar('impact','radiation_adjuvant_fractions_total')
+#gen_radtreatment_to_mut_bar('impact','therapy_regimen')
+#gen_radtreatment_to_mut_bar('impact','radiation_therapy_site')
 
 #gen_radtreatment_to_mut_bar('dna_change','radiation_therapy_site')
 
