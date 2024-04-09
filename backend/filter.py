@@ -18,6 +18,17 @@ patient_to_mutation={}
 mutation_to_patients={}
 radiation_treatment_list = {}
 pharma_treatment_list = {}
+final_pharma = ["TCGA-E2-A14Z",
+"TCGA-AO-A03O",
+"TCGA-B6-A409",
+"TCGA-E9-A1RB",
+"TCGA-E9-A1NF",
+"TCGA-E9-A226",
+"TCGA-AR-A0U2",
+"TCGA-E9-A1RB"
+"TCGA-E9-A1NF",
+"TCGA-E9-A226",
+"TCGA-E9-A1RB"]
 
 for x, row in clinical.iterrows():
     patient_list[row["case_submitter_id"]]=(Patient(row["case_id"],
@@ -189,19 +200,19 @@ for x, row in mutations.iterrows():
 for x, row in radiation_treatment_data.iterrows():
     radiation_treatment_list[row["bcr_patient_barcode"]]=(Radiation(row["bcr_patient_barcode"],row["bcr_radiation_barcode"],row["form_completion_date"],row["bcr_radiation_uuid"],row["radiation_therapy_type"],row["radiation_therapy_site"],row["radiation_total_dose"],row["radiation_adjuvant_units"],row["radiation_adjuvant_fractions_total"],row["radiation_therapy_started_days_to"],row["radiation_therapy_ended_days_to"],row["treatment_best_response"],row["course_number"],row["therapy_regimen"]))
 for x, row in pharmaceutical_treatment_data.iterrows():
-        pharma_treatment_list.setdefault(row["bcr_patient_barcode"],[])
-        
-        pharma_treatment_list[row["bcr_patient_barcode"]].append(Pharmaceutical(row["bcr_patient_barcode"],row["bcr_drug_barcode"],row["form_completion_date"],row["bcr_drug_uuid"],row["drug_name"],row["therapy_type"],row["days_to_drug_therapy_start"],row["days_to_drug_therapy_end"],row["measure_of_response"],row["number_cycles"],row["therapy_type_notes"],row["prescribed_dose_units"],row['total_dose_units'],row["prescribed_dose"],row["regimen_number"],row["route_of_administration"],row["regimen_indication"],row["total_dose"],row["tx_on_clinical_trial"]))
+        if(patient_list.get(row['bcr_patient_barcode']) is not None):
+            pharma_treatment_list.setdefault(row["bcr_patient_barcode"],[])
+            pharma_treatment_list[row["bcr_patient_barcode"]].append(Pharmaceutical(row["bcr_patient_barcode"],row["bcr_drug_barcode"],row["form_completion_date"],row["bcr_drug_uuid"],row["drug_name"],row["therapy_type"],row["days_to_drug_therapy_start"],row["days_to_drug_therapy_end"],row["measure_of_response"],row["number_cycles"],row["therapy_type_notes"],row["prescribed_dose_units"],row['total_dose_units'],row["prescribed_dose"],row["regimen_number"],row["route_of_administration"],row["regimen_indication"],row["total_dose"],row["tx_on_clinical_trial"]))
 for patient in patient_list.values():
     if((getattr(patient,'treatment_type') == 'Radiation Therapy, NOS') & (getattr(patient,'treatment_or_therapy') == 'yes')):
         radiation_cases.append(patient)
     elif((getattr(patient,'treatment_type') == 'Pharmaceutical Therapy, NOS') &  (getattr(patient,'treatment_or_therapy') == 'yes')):
         pharmatherapy_cases.append(patient)
-        
+
+
 #print("Number of radation cases: " + str(len(radiation_cases))+"\n")
 #print("Number of pharmatherapy cases: " + str(len(pharmatherapy_cases))+"\n")
 #print("Total cases: " + str(len(radiation_cases+pharmatherapy_cases))+"\n\n")
-
 
 #for x,y in patient_to_mutation.items():
 #    print("Patient: " + str(x) + ", " + "Mutation: " + str(y))

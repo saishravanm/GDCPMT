@@ -4,6 +4,16 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.pyplot import figure
 import plotly.express as px
 
+from lifelines import KaplanMeierFitter
+
+from lifelines.utils import median_survival_times
+
+from lifelines.statistics import pairwise_logrank_test
+
+from lifelines import CoxPHFitter
+
+from IPython.display import display
+
 #Populate Radiation Total Dose 
 def pharma_populate_x_y_z(drug_name, x_axis, y_axis, z_axis):
     x = []
@@ -90,22 +100,56 @@ def mut_rad_populate_x_y_z(x_axis,y_axis,z_axis):
     #plt.savefig("backend\\models\\radiation_models"+str(x_axis + "_to_" + y_axis + "_to_" + z_axis)+".png")
     ax.write_html("backend\\models\\radiation_models\\scatter_plots\\mutations\\"+y_axis+str(x_axis + "_to_" + y_axis+"_to_"+z_axis)+".html")
 
-mut_rad_populate_x_y_z('radiation_total_dose','consequences','days_to_diagnosis')
-mut_rad_populate_x_y_z('radiation_total_dose','consequences','days_to_best_overall_response')
-mut_rad_populate_x_y_z('radiation_total_dose','consequences','days_to_last_follow_up')
-mut_rad_populate_x_y_z('radiation_total_dose','consequences','days_to_last_known_disease_status')
-mut_rad_populate_x_y_z('radiation_total_dose','consequences','days_to_recurrence')
-mut_rad_populate_x_y_z('radiation_total_dose','consequences','days_to_diagnosis')
-mut_rad_populate_x_y_z('radiation_total_dose','consequences','days_to_best_overall_response')
-mut_rad_populate_x_y_z('radiation_total_dose','consequences','days_to_last_follow_up')
-mut_rad_populate_x_y_z('radiation_total_dose','consequences','days_to_last_known_disease_status')
-mut_rad_populate_x_y_z('radiation_total_dose','consequences','days_to_recurrence')
-mut_rad_populate_x_y_z('radiation_adjuvant_fractions_total','consequences','days_to_diagnosis')
-mut_rad_populate_x_y_z('radiation_adjuvant_fractions_total','consequences','days_to_diagnosis')
-mut_rad_populate_x_y_z('radiation_total_dose','consequences','number_of_cycles')
-mut_rad_populate_x_y_z('radiation_total_dose','consequences','number_of_cycles')
-mut_rad_populate_x_y_z('radiation_adjuvant_fractions_total','consequences','number_of_cycles')
-mut_rad_populate_x_y_z('radiation_adjuvant_fractions_total','consequences','number_of_cycles')
+kmf = KaplanMeierFitter()
+alk_time = []
+alk_event = []
+anti_time = []
+anti_event = []
+for patient in pharma_treatment_list.keys():
+    treat_list = pharma_treatment_list.get(patient)
+    for treatment in treat_list:
+        if(getattr(treatment,'drug_name').lower() == 'carboplatin' or getattr(treatment,'drug_name').lower == 'cyclophosphamide' or getattr(treatment,'drug_name') == 'cytoxan'):
+            patient_object = patient_list.get(patient)
+            if(getattr(patient_object,'vital_status').lower() == 'dead'):
+                alk_time.append(float(getattr(patient_object,'days_to_death')))
+                alk_event.append(1)
+            else:
+                alk_time.append(float(getattr(patient_object,'days_to_last_follow_up')))
+                alk_event.append(0)
+
+for patient in pharma_treatment_list.keys():
+    treat_list = pharma_treatment_list.get(patient)
+    for treatment in treat_list:
+        if(getattr(treatment,'drug_name').lower() == 'tamoxifen'):
+            patient_object = patient_list.get(patient)
+            if(getattr(patient_object,'vital_status').lower() == 'dead'):
+                anti_time.append(float(getattr(patient_object,'days_to_death')))
+                anti_event.append(1)
+            else:
+                anti_time.append(float(getattr(patient_object,'days_to_last_follow_up')))
+                anti_event.append(0)
+
+kmf.fit(anti_time,event_observed=anti_event,label="Antimetabolites")
+kmf.plot()
+kmf.fit(alk_time,event_observed=alk_event,label="Antiestrogen")
+kmf.plot()
+plt.title("Kaplan-Meier Survival Curve: Alkylating Agent and Antiestrogen Pharmaceutical Therapy")
+plt.xlabel('Time')
+plt.ylabel('Survival Probability')
+plt.legend(loc='best')
+plt.show()
+
+cph = CoxPHFitter()
+pd.set_option('display.max_rows',None)
+pd.set_option('display.max_columns',None)
+antimetabolites = pd.read_excel("C:\\Users\\Sai\\Documents\\GitHub\\TPBase\\backend\\clinical_data\\amtable.xlsx")
+alkylatingagent = pd.read_excel("C:\\Users\\Sai\\Documents\\GitHub\\TPBase\\backend\\clinical_data\\aatable.xlsx")
+data = pd.concat([alkylatingagent,antimetabolites])
+cph.fit(data,duration_col='Time',event_col='Event',formula="Drug_Class")
+print(data)
+display(pd.DataFrame(cph.summary))
+#print(anti_time)
+#print(anti_event)
 
 #drug_list = ['5-Fluorouracil','Arimidex', 'Carboplatin', 'Cyclophosphamide','Cytoxan','Docetaxel']
 
