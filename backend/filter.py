@@ -209,7 +209,31 @@ for patient in patient_list.values():
     elif((getattr(patient,'treatment_type') == 'Pharmaceutical Therapy, NOS') &  (getattr(patient,'treatment_or_therapy') == 'yes')):
         pharmatherapy_cases.append(patient)
 
-
+inner_list = []
+outer_list = []
+for patient in pharma_treatment_list.keys():
+    bcr_patient_barcode = patient
+    pat_obj = patient_list.get(patient)
+    for drug in pharma_treatment_list.get(patient):
+        if(getattr(drug,'total_dose') != '[Not Available]'):
+            drug_name = getattr(drug,'drug_name')
+            therapy_type = getattr(drug,'therapy_type')
+            days_to_drug_therapy_start=getattr(drug,'days_to_drug_therapy_start')
+            days_to_drug_therapy_end=getattr(drug,'days_to_drug_therapy_end')
+            total_dose=getattr(drug,'total_dose')
+            dose_units = getattr(drug, 'total_dose_units')
+            consequence_type=getattr(patient_to_mutation.get(pat_obj),'consequence_type')
+            if(getattr(pat_obj,'vital_status').lower() == 'dead'):
+                deceased = 1
+            else: 
+                deceased = 0
+            inner_list = [bcr_patient_barcode,drug_name,therapy_type,days_to_drug_therapy_start,days_to_drug_therapy_end,total_dose,dose_units,consequence_type,deceased]
+            outer_list.append(inner_list)
+        
+        
+pharma_df = pd.DataFrame(outer_list,columns=['bcr_patient_barcode','drug_name','therapy_type','days_to_drug_therapy_start', 'days_to_drug_therapy_end',	'total_dose','dose_units','consequence_type','deceased'])
+pharma_df.to_excel('output.xlsx',index=False)
+print(pharma_df.head())
 #print("Number of radation cases: " + str(len(radiation_cases))+"\n")
 #print("Number of pharmatherapy cases: " + str(len(pharmatherapy_cases))+"\n")
 #print("Total cases: " + str(len(radiation_cases+pharmatherapy_cases))+"\n\n")

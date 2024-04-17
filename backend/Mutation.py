@@ -4,6 +4,7 @@ class Mutation:
         self.dna_change = dna_change
         self.type = type
         self.consequences = consequences
+        self.consequence_type = self.consequences.split(" ")[0]
         self.impact = impact
         temp = impact.split(",")
         self.vep = temp[0]
