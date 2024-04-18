@@ -4,7 +4,7 @@
 
 **Usage:**
 1. Clone the repository using the `git clone` command.
-2. Change directories into ".GDCPMT/backend".
+2. Change directories into "GDCPMT/backend".
 3. Run Python using `python`.
 4. Inside the Python console, run `import filter`.
 5. To call a function, use `filter.function_name` (replace `function_name` with the desired function).
