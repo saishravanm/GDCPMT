@@ -18,17 +18,6 @@ patient_to_mutation={}
 mutation_to_patients={}
 radiation_treatment_list = {}
 pharma_treatment_list = {}
-final_pharma = ["TCGA-E2-A14Z",
-"TCGA-AO-A03O",
-"TCGA-B6-A409",
-"TCGA-E9-A1RB",
-"TCGA-E9-A1NF",
-"TCGA-E9-A226",
-"TCGA-AR-A0U2",
-"TCGA-E9-A1RB"
-"TCGA-E9-A1NF",
-"TCGA-E9-A226",
-"TCGA-E9-A1RB"]
 
 for x, row in clinical.iterrows():
     patient_list[row["case_submitter_id"]]=(Patient(row["case_id"],

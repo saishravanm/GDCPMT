@@ -148,19 +148,3 @@ data = pd.concat([alkylatingagent,antimetabolites])
 cph.fit(data,duration_col='Time',event_col='Event',formula="Drug_Class")
 print(data)
 display(pd.DataFrame(cph.summary))
-#print(anti_time)
-#print(anti_event)
-
-#drug_list = ['5-Fluorouracil','Arimidex', 'Carboplatin', 'Cyclophosphamide','Cytoxan','Docetaxel']
-
-#for drug in drug_list:
-#    mut_pharma_populate_x_y_z(drug,'number_cycles','prescribed_dose','consequences')
-#for patient in deceased_pharma_case_ids:
-#    if(pharma_treatment_list.get(patient) is not None):
-#         for treatments in pharma_treatment_list.get(patient):
-#             print(patient,": ",getattr(treatments,'drug_name'))
-
-#Populate Days to Diagnosis
-
-#for ax, angle in zip(axes.flat, angles):
-    
