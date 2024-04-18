@@ -19,7 +19,6 @@ mutations = pd.read_excel('C:\\Users\\Sai\\Documents\\GitHub\\TPBase\\backend\\m
 #radiationinfo = pd.read_csv('./clinical_data/radiationinfo.tsv',delimiter='/t')
 
 treatment_data = pd.ExcelFile('C:\\Users\\Sai\\Documents\\GitHub\\TPBase\\backend\\clinical_data\\treatment_data.xlsx')
-radiation_treatment_data = pd.read_excel(treatment_data,'radiation_info')
 pharmaceutical_treatment_data = pd.read_excel("C:\\Users\\Sai\\Documents\\GitHub\\TPBase\\backend\\clinical_data\\all_clinicaL_drug_info.xlsx")
 
 with open('C:\\Users\\Sai\\Documents\\GitHub\\TPBase\\backend\\mutations_data\\patmut.csv','r',encoding='utf-8',newline='') as patmutcsv:

@@ -1,3 +1,0 @@
-                               coef       exp(coef)  se(coef)  coef lower 95%  coef upper 95%  exp(coef) lower 95%  exp(coef) upper 95%  cmp to         z         p  -log2(p)
-covariate
-Drug_Class[T.Antimetabolite]  0.767981    2.15541    0.738482       -0.679418         2.21538             0.506912             9.164891     0.0  1.039945  0.298366  1.744847

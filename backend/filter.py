@@ -8,7 +8,6 @@ from Treatment import *
 import bs4
 
 
-f = open("./categories.txt","a")
 
 radiation_cases = []
 pharmatherapy_cases = []
@@ -19,8 +18,30 @@ mutation_to_patients={}
 radiation_treatment_list = {}
 pharma_treatment_list = {}
 
-for x, row in clinical.iterrows():
-    patient_list[row["case_submitter_id"]]=(Patient(row["case_id"],
+#add file paths in setup 
+def setup(clinical_file_type, clinical_path,mutation_file_type,mutation_file_path, pharma_file_type,pharm_treatment_path):
+    if(clinical_file_type == 'csv'):
+        clinical = pd.read_csv(clinical_path)
+    elif(clinical_file_type == 'tsv'):
+        clinical = pd.read_csv(clinical_path,delimiter='/t')
+    elif(clinical_file_type == 'excel'):
+        clincal = pd.read_excel(clinical_path)
+    if(mutation_file_type == 'csv'):
+        mutation = pd.read_csv(mutation_file_path)
+    elif(mutation_file_type == 'tsv'):
+        mutation = pd.read_csv(mutation_file_path,delimiter='/t')
+    elif(mutation_file_type == 'excel'):
+        mutation = pd.read_excel(mutation_file_path)
+    if(pharma_file_type == 'csv'):
+        pharmaceutical_treatment_data = pd.read_csv(pharm_treatment_path)
+    elif(pharma_file_type == 'tsv'):
+        pharmaceutical_treatment_data = pd.read_csv(pharm_treatment_path,delimiter='/t')
+    elif(pharma_file_type == 'excel'):
+        pharmaceutical_treatment_data = pd.read_excel(pharm_treatment_path)
+#create list of patients
+def create_patient_list():
+    for x, row in clinical.iterrows():
+     patient_list[row["case_submitter_id"]]=(Patient(row["case_id"],
 row["case_submitter_id"],
 row["project_id"],
 row["age_at_index"],
@@ -179,56 +200,51 @@ row["treatment_or_therapy"],
 row["treatment_outcome"],
 row["treatment_type"],
 ))
-for x, row in mutations.iterrows():
-    mut_list = []
-    mut = Mutation(row['DNA Change'],row['Type'],row['Consequences'],row['Impact'])
-    mutation_list.append(mut)
-    mutation_to_patients[mut] = [row['Associated Patients'].split('\n')]
+
+#create patient to mutation (vice versa) mapping
+def create_mutation():
+    for x, row in mutations.iterrows():
+        mut_list = []
+        mut = Mutation(row['DNA Change'],row['Type'],row['Consequences'],row['Impact'])
+        mutation_list.append(mut)
+        mutation_to_patients[mut] = [row['Associated Patients'].split('\n')]
     for y in row['Associated Patients'].split('\n'):
         patient_to_mutation[patient_list.get(y)]=mut
-for x, row in radiation_treatment_data.iterrows():
-    radiation_treatment_list[row["bcr_patient_barcode"]]=(Radiation(row["bcr_patient_barcode"],row["bcr_radiation_barcode"],row["form_completion_date"],row["bcr_radiation_uuid"],row["radiation_therapy_type"],row["radiation_therapy_site"],row["radiation_total_dose"],row["radiation_adjuvant_units"],row["radiation_adjuvant_fractions_total"],row["radiation_therapy_started_days_to"],row["radiation_therapy_ended_days_to"],row["treatment_best_response"],row["course_number"],row["therapy_regimen"]))
-for x, row in pharmaceutical_treatment_data.iterrows():
+
+#create pharmaceutical treatment list
+def create_pharma_treatment_list():
+    for x, row in pharmaceutical_treatment_data.iterrows():
         if(patient_list.get(row['bcr_patient_barcode']) is not None):
             pharma_treatment_list.setdefault(row["bcr_patient_barcode"],[])
             pharma_treatment_list[row["bcr_patient_barcode"]].append(Pharmaceutical(row["bcr_patient_barcode"],row["bcr_drug_barcode"],row["form_completion_date"],row["bcr_drug_uuid"],row["drug_name"],row["therapy_type"],row["days_to_drug_therapy_start"],row["days_to_drug_therapy_end"],row["measure_of_response"],row["number_cycles"],row["therapy_type_notes"],row["prescribed_dose_units"],row['total_dose_units'],row["prescribed_dose"],row["regimen_number"],row["route_of_administration"],row["regimen_indication"],row["total_dose"],row["tx_on_clinical_trial"]))
-for patient in patient_list.values():
-    if((getattr(patient,'treatment_type') == 'Radiation Therapy, NOS') & (getattr(patient,'treatment_or_therapy') == 'yes')):
-        radiation_cases.append(patient)
-    elif((getattr(patient,'treatment_type') == 'Pharmaceutical Therapy, NOS') &  (getattr(patient,'treatment_or_therapy') == 'yes')):
-        pharmatherapy_cases.append(patient)
-
-inner_list = []
-outer_list = []
-for patient in pharma_treatment_list.keys():
-    bcr_patient_barcode = patient
-    pat_obj = patient_list.get(patient)
-    for drug in pharma_treatment_list.get(patient):
-        if(getattr(drug,'total_dose') != '[Not Available]'):
-            drug_name = getattr(drug,'drug_name')
-            therapy_type = getattr(drug,'therapy_type')
-            days_to_drug_therapy_start=getattr(drug,'days_to_drug_therapy_start')
-            days_to_drug_therapy_end=getattr(drug,'days_to_drug_therapy_end')
-            total_dose=getattr(drug,'total_dose')
-            dose_units = getattr(drug, 'total_dose_units')
-            consequence_type=getattr(patient_to_mutation.get(pat_obj),'consequence_type')
-            if(getattr(pat_obj,'vital_status').lower() == 'dead'):
-                deceased = 1
-            else: 
-                deceased = 0
-            inner_list = [bcr_patient_barcode,drug_name,therapy_type,days_to_drug_therapy_start,days_to_drug_therapy_end,total_dose,dose_units,consequence_type,deceased]
-            outer_list.append(inner_list)
-        
-        
-pharma_df = pd.DataFrame(outer_list,columns=['bcr_patient_barcode','drug_name','therapy_type','days_to_drug_therapy_start', 'days_to_drug_therapy_end',	'total_dose','dose_units','consequence_type','deceased'])
-pharma_df.to_excel('output.xlsx',index=False)
-print(pharma_df.head())
-#print("Number of radation cases: " + str(len(radiation_cases))+"\n")
-#print("Number of pharmatherapy cases: " + str(len(pharmatherapy_cases))+"\n")
-#print("Total cases: " + str(len(radiation_cases+pharmatherapy_cases))+"\n\n")
-
-#for x,y in patient_to_mutation.items():
-#    print("Patient: " + str(x) + ", " + "Mutation: " + str(y))
-#for patient in radiation_cases:
-#    print("Patient: " + str(patient) + " ->\n " + str(patient_to_mutation.get(patient))+"\n")
-#print(mutations.columns)
+    for patient in patient_list.values():
+        if((getattr(patient,'treatment_type') == 'Radiation Therapy, NOS') & (getattr(patient,'treatment_or_therapy') == 'yes')):
+            radiation_cases.append(patient)
+        elif((getattr(patient,'treatment_type') == 'Pharmaceutical Therapy, NOS') &  (getattr(patient,'treatment_or_therapy') == 'yes')):
+            pharmatherapy_cases.append(patient)
+def function_list(): 
+    print("setup(clinical_file_type, clinical_path,mutation_file_type,mutation_file_path, pharma_file_type,pharm_treatment_path) \n create_patient_list() \n create_mutation() \n create_pharma_treatment_list() \n create_model_date()")
+#create file compatible with the model
+def create_model_data():
+    inner_list = []
+    outer_list = []
+    for patient in pharma_treatment_list.keys():
+        bcr_patient_barcode = patient
+        pat_obj = patient_list.get(patient)
+        for drug in pharma_treatment_list.get(patient):
+            if(getattr(drug,'total_dose') != '[Not Available]'):
+                drug_name = getattr(drug,'drug_name')
+                therapy_type = getattr(drug,'therapy_type')
+                days_to_drug_therapy_start=getattr(drug,'days_to_drug_therapy_start')
+                days_to_drug_therapy_end=getattr(drug,'days_to_drug_therapy_end')
+                total_dose=getattr(drug,'total_dose')
+                dose_units = getattr(drug, 'total_dose_units')
+                consequence_type=getattr(patient_to_mutation.get(pat_obj),'consequence_type')
+                if(getattr(pat_obj,'vital_status').lower() == 'dead'):
+                    deceased = 1
+                else: 
+                    deceased = 0
+                inner_list = [bcr_patient_barcode,drug_name,therapy_type,days_to_drug_therapy_start,days_to_drug_therapy_end,total_dose,dose_units,consequence_type,deceased]
+                outer_list.append(inner_list)
+    pharma_df = pd.DataFrame(outer_list,columns=['bcr_patient_barcode','drug_name','therapy_type','days_to_drug_therapy_start', 'days_to_drug_therapy_end',	'total_dose','dose_units','consequence_type','deceased'])
+    pharma_df.to_excel('output.xlsx',index=False)
