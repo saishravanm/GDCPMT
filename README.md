@@ -7,5 +7,5 @@
 2. Change directories into "./backend".
 3. Run Python using `python`.
 4. Inside the Python console, run `import filter`.
-5. To call a function, use `filter.function_name` (replace `function_name` with the desired function).
-6. To see a list of available functions, run `filter.function_list`.
+5. To call a function, use `filter.function_name()` (replace `function_name` with the desired function).
+6. To see a list of available functions, run `filter.function_list()`.

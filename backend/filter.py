@@ -23,19 +23,19 @@ def setup(clinical_file_type, clinical_path,mutation_file_type,mutation_file_pat
     if(clinical_file_type == 'csv'):
         clinical = pd.read_csv(clinical_path)
     elif(clinical_file_type == 'tsv'):
-        clinical = pd.read_csv(clinical_path,delimiter='/t')
+        clinical = pd.read_csv(clinical_path,delimiter='\t')
     elif(clinical_file_type == 'excel'):
         clincal = pd.read_excel(clinical_path)
     if(mutation_file_type == 'csv'):
         mutation = pd.read_csv(mutation_file_path)
     elif(mutation_file_type == 'tsv'):
-        mutation = pd.read_csv(mutation_file_path,delimiter='/t')
+        mutation = pd.read_csv(mutation_file_path,delimiter='\t')
     elif(mutation_file_type == 'excel'):
         mutation = pd.read_excel(mutation_file_path)
     if(pharma_file_type == 'csv'):
         pharmaceutical_treatment_data = pd.read_csv(pharm_treatment_path)
     elif(pharma_file_type == 'tsv'):
-        pharmaceutical_treatment_data = pd.read_csv(pharm_treatment_path,delimiter='/t')
+        pharmaceutical_treatment_data = pd.read_csv(pharm_treatment_path,delimiter='/\t')
     elif(pharma_file_type == 'excel'):
         pharmaceutical_treatment_data = pd.read_excel(pharm_treatment_path)
 #create list of patients
