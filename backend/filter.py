@@ -6,8 +6,7 @@ from Patient import Patient
 from Mutation import Mutation
 from Treatment import *
 import bs4
-
-
+from setup import slides
 
 radiation_cases = []
 pharmatherapy_cases = []
@@ -208,8 +207,8 @@ def create_mutation():
         mut = Mutation(row['DNA Change'],row['Type'],row['Consequences'],row['Impact'])
         mutation_list.append(mut)
         mutation_to_patients[mut] = [row['Associated Patients'].split('\n')]
-    for y in row['Associated Patients'].split('\n'):
-        patient_to_mutation[patient_list.get(y)]=mut
+        for y in row['Associated Patients'].split('\n'):
+            patient_to_mutation[patient_list.get(y)]=mut
 
 #create pharmaceutical treatment list
 def create_pharma_treatment_list():
@@ -225,9 +224,14 @@ def create_pharma_treatment_list():
 def function_list(): 
     print("setup(clinical_file_type, clinical_path,mutation_file_type,mutation_file_path, pharma_file_type,pharm_treatment_path) \n create_patient_list() \n create_mutation() \n create_pharma_treatment_list() \n create_model_date()")
 #create file compatible with the model
+create_patient_list()
+create_mutation()
+create_pharma_treatment_list()
+print(len(patient_to_mutation.keys()))
 def create_model_data():
     inner_list = []
     outer_list = []
+    print(type(slides))
     for patient in pharma_treatment_list.keys():
         bcr_patient_barcode = patient
         pat_obj = patient_list.get(patient)
@@ -240,11 +244,27 @@ def create_model_data():
                 total_dose=getattr(drug,'total_dose')
                 dose_units = getattr(drug, 'total_dose_units')
                 consequence_type=getattr(patient_to_mutation.get(pat_obj),'consequence_type')
+                age = getattr(pat_obj,'age_at_index')
+                ajcc_path_m = getattr(pat_obj,'ajcc_pathologic_m')
+                ajcc_path_n = getattr(pat_obj,'ajcc_pathologic_n')
+                ajcc_path_t = getattr(pat_obj,'ajcc_pathologic_t')
+                ajcc_path_stage = getattr(pat_obj,'ajcc_pathologic_stage')
+                primary_diagnosis = getattr(pat_obj,'primary_diagnosis')
+                slides.columns.name = None
+                percent_lymphocyte = slides.loc[slides['case_submitter_id'] == bcr_patient_barcode,'percent_lymphocyte_infiltration'][:1]
+                percent_monocyte = slides.loc[slides['case_submitter_id'] == bcr_patient_barcode,'percent_monocyte_infiltration'][:1]
+                percent_necrosis = slides.loc[slides['case_submitter_id'] == bcr_patient_barcode,'percent_necrosis'][:1]
+                percent_tumor_cells = slides.loc[slides['case_submitter_id'] == bcr_patient_barcode,'percent_tumor_cells'][:1]
+                section_location = slides.loc[slides['case_submitter_id'] == bcr_patient_barcode,'section_location'][:1]
+                hist_list = [percent_lymphocyte,percent_monocyte,percent_necrosis,percent_tumor_cells,section_location][:1]
                 if(getattr(pat_obj,'vital_status').lower() == 'dead'):
                     deceased = 1
                 else: 
                     deceased = 0
-                inner_list = [bcr_patient_barcode,drug_name,therapy_type,days_to_drug_therapy_start,days_to_drug_therapy_end,total_dose,dose_units,consequence_type,deceased]
+                inner_list = [bcr_patient_barcode,drug_name,therapy_type,days_to_drug_therapy_start,days_to_drug_therapy_end,total_dose,dose_units,consequence_type,age,ajcc_path_m,ajcc_path_n,ajcc_path_t,ajcc_path_stage,primary_diagnosis,percent_lymphocyte,percent_monocyte,percent_necrosis,percent_tumor_cells,section_location, deceased]
                 outer_list.append(inner_list)
-    pharma_df = pd.DataFrame(outer_list,columns=['bcr_patient_barcode','drug_name','therapy_type','days_to_drug_therapy_start', 'days_to_drug_therapy_end',	'total_dose','dose_units','consequence_type','deceased'])
+    pharma_df = pd.DataFrame(outer_list,columns=['bcr_patient_barcode','drug_name','therapy_type','days_to_drug_therapy_start', 'days_to_drug_therapy_end',	'total_dose','dose_units','consequence_type','age','ajcc_pathologic_m','ajcc_pathologic_n','ajcc_pathologic_t','ajcc_pathologic_stage','primary_diagnosis','percent_lymphocyte','percent_monocyte','percent_necrosis','percent_tumor_cells','section_location','deceased'])
     pharma_df.to_excel('output.xlsx',index=False)
+
+
+create_model_data()
