@@ -17,6 +17,15 @@ mutation_to_patients={}
 radiation_treatment_list = {}
 pharma_treatment_list = {}
 
+p53_patient_id_list = []
+pik3ca_patient_id_list = []
+
+for x, row in p53_list.iterrows():
+    p53_patient_id_list.append(row['case_submitter_id'])
+
+for x, row in pik3ca_list.iterrows():
+    pik3ca_patient_id_list.append(row['case_submitter_id'])
+
 #add file paths in setup 
 def setup(clinical_file_type, clinical_path,mutation_file_type,mutation_file_path, pharma_file_type,pharm_treatment_path):
     if(clinical_file_type == 'csv'):
@@ -228,22 +237,42 @@ create_patient_list()
 create_mutation()
 create_pharma_treatment_list()
 print(len(patient_to_mutation.keys()))
+
+print(len(patient_list))
+
 def create_model_data():
     inner_list = []
     outer_list = []
     print(type(slides))
+
     for patient in pharma_treatment_list.keys():
         bcr_patient_barcode = patient
         pat_obj = patient_list.get(patient)
         for drug in pharma_treatment_list.get(patient):
             if(getattr(drug,'total_dose') != '[Not Available]'):
+                days_to_death = getattr(pat_obj,'days_to_death')
                 drug_name = getattr(drug,'drug_name')
+                drug_class = ''
+                if(drug_name in ["Cyclophosphamide", "Cyclophospmide", "Cyclophasphamide", "cyclophosphamide+methotrexatum+fluorouracillum",'Carboplatin']):
+                    drug_class = 'alkylating agent'
+                    anthracyline_status = 0
+                    alkylating_agent_status = 1
+                elif(drug_name in ['adriamycin','Adriamycin','Doxorubicin']):
+                    drug_class = 'anthracyline'
+                    anthracyline_status = 1
+                    alkylating_agent_status = 0
+                if(bcr_patient_barcode in p53_patient_id_list):
+                    p53_status = 1
+                    pik3ca_status = 0
+                elif(bcr_patient_barcode in pik3ca_patient_id_list):
+                    p53_status = 0
+                    pik3ca_status = 1
                 therapy_type = getattr(drug,'therapy_type')
                 days_to_drug_therapy_start=getattr(drug,'days_to_drug_therapy_start')
                 days_to_drug_therapy_end=getattr(drug,'days_to_drug_therapy_end')
                 total_dose=getattr(drug,'total_dose')
                 dose_units = getattr(drug, 'total_dose_units')
-                consequence_type=getattr(patient_to_mutation.get(pat_obj),'consequence_type')
+                #consequence_type=getattr(patient_to_mutation.get(pat_obj),'consequence_type')
                 age = getattr(pat_obj,'age_at_index')
                 ajcc_path_m = getattr(pat_obj,'ajcc_pathologic_m')
                 ajcc_path_n = getattr(pat_obj,'ajcc_pathologic_n')
@@ -261,9 +290,9 @@ def create_model_data():
                     deceased = 1
                 else: 
                     deceased = 0
-                inner_list = [bcr_patient_barcode,drug_name,therapy_type,days_to_drug_therapy_start,days_to_drug_therapy_end,total_dose,dose_units,consequence_type,age,ajcc_path_m,ajcc_path_n,ajcc_path_t,ajcc_path_stage,primary_diagnosis,percent_lymphocyte,percent_monocyte,percent_necrosis,percent_tumor_cells,section_location, deceased]
+                inner_list = [bcr_patient_barcode,days_to_death,drug_class,p53_status,pik3ca_status,drug_name,therapy_type,days_to_drug_therapy_start,days_to_drug_therapy_end,total_dose,dose_units,age,ajcc_path_m,ajcc_path_n,ajcc_path_t,ajcc_path_stage,primary_diagnosis,percent_lymphocyte,percent_monocyte,percent_necrosis,percent_tumor_cells,section_location, deceased]
                 outer_list.append(inner_list)
-    pharma_df = pd.DataFrame(outer_list,columns=['bcr_patient_barcode','drug_name','therapy_type','days_to_drug_therapy_start', 'days_to_drug_therapy_end',	'total_dose','dose_units','consequence_type','age','ajcc_pathologic_m','ajcc_pathologic_n','ajcc_pathologic_t','ajcc_pathologic_stage','primary_diagnosis','percent_lymphocyte','percent_monocyte','percent_necrosis','percent_tumor_cells','section_location','deceased'])
+    pharma_df = pd.DataFrame(outer_list,columns=['bcr_patient_barcode','days_to_death','drug_class','p53_status','pik3ca_status','drug_name','therapy_type','days_to_drug_therapy_start', 'days_to_drug_therapy_end',	'total_dose','dose_units','age','ajcc_pathologic_m','ajcc_pathologic_n','ajcc_pathologic_t','ajcc_pathologic_stage','primary_diagnosis','percent_lymphocyte','percent_monocyte','percent_necrosis','percent_tumor_cells','section_location','deceased'])
     pharma_df.to_excel('output.xlsx',index=False)
 
 
