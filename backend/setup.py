@@ -5,7 +5,7 @@ clinical=pd.read_csv('C:\\Users\\saish\\Documents\\GitHub\\GDCPMT\\backend\\EXAM
 clinical.columns.name = 'clinical'
 
 
-#mutations1 = pd.read_csv('C:\\Users\\Sai\\Documents\\GitHub\\TPBase\\backend\\mutations_data\\mutations_1.csv',sep='\t')
+#mutations1  = pd.read_csv('C:\\Users\\Sai\\Documents\\GitHub\\TPBase\\backend\\mutations_data\\mutations_1.csv',sep='\t')
 #mutations1.columns.name = 'mutations1'
 
 #mutations2 = pd.read_csv('C:\\Users\\Sai\\Documents\\GitHub\\TPBase\\backend\\mutations_data\\mutations_2.csv')

@@ -250,7 +250,9 @@ def create_model_data():
         pat_obj = patient_list.get(patient)
         for drug in pharma_treatment_list.get(patient):
             if(getattr(drug,'total_dose') != '[Not Available]'):
-                days_to_death = getattr(pat_obj,'days_to_death')
+                anthracyline_status = 0
+                alkylating_agent_status = 0
+                days_to_death = getattr(pat_obj,'days_to_last_follow_up')
                 drug_name = getattr(drug,'drug_name')
                 drug_class = ''
                 if(drug_name in ["Cyclophosphamide", "Cyclophospmide", "Cyclophasphamide", "cyclophosphamide+methotrexatum+fluorouracillum",'Carboplatin']):
@@ -290,9 +292,9 @@ def create_model_data():
                     deceased = 1
                 else: 
                     deceased = 0
-                inner_list = [bcr_patient_barcode,days_to_death,drug_class,p53_status,pik3ca_status,drug_name,therapy_type,days_to_drug_therapy_start,days_to_drug_therapy_end,total_dose,dose_units,age,ajcc_path_m,ajcc_path_n,ajcc_path_t,ajcc_path_stage,primary_diagnosis,percent_lymphocyte,percent_monocyte,percent_necrosis,percent_tumor_cells,section_location, deceased]
+                inner_list = [bcr_patient_barcode,days_to_death,drug_class,p53_status,pik3ca_status,drug_name,therapy_type,days_to_drug_therapy_start,days_to_drug_therapy_end,total_dose,dose_units,age,ajcc_path_m,ajcc_path_n,ajcc_path_t,ajcc_path_stage,primary_diagnosis,percent_lymphocyte,percent_monocyte,percent_necrosis,percent_tumor_cells,section_location, deceased, anthracyline_status, alkylating_agent_status]
                 outer_list.append(inner_list)
-    pharma_df = pd.DataFrame(outer_list,columns=['bcr_patient_barcode','days_to_death','drug_class','p53_status','pik3ca_status','drug_name','therapy_type','days_to_drug_therapy_start', 'days_to_drug_therapy_end',	'total_dose','dose_units','age','ajcc_pathologic_m','ajcc_pathologic_n','ajcc_pathologic_t','ajcc_pathologic_stage','primary_diagnosis','percent_lymphocyte','percent_monocyte','percent_necrosis','percent_tumor_cells','section_location','deceased'])
+    pharma_df = pd.DataFrame(outer_list,columns=['bcr_patient_barcode','days_to_death','drug_class','p53_status','pik3ca_status','drug_name','therapy_type','days_to_drug_therapy_start', 'days_to_drug_therapy_end',	'total_dose','dose_units','age','ajcc_pathologic_m','ajcc_pathologic_n','ajcc_pathologic_t','ajcc_pathologic_stage','primary_diagnosis','percent_lymphocyte','percent_monocyte','percent_necrosis','percent_tumor_cells','section_location','deceased','anthracyline_status','alkylating_agent_status'])
     pharma_df.to_excel('output.xlsx',index=False)
 
 
